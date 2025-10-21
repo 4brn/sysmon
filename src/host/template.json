@@ -1,0 +1,25 @@
+{
+  "static": {
+    "system": "model, manufacturer, virtual",
+    "bios": "vendor, version, releaseDate",
+    "osInfo": "platform, distro, kernel, arch, hostname",
+    "cpu": "manufacturer, brand, physicalCores, cores",
+    "mem": "total",
+    "battery": "hasBattery",
+    "diskLayout": "device, type, name, vendor, size",
+    "wifiInterfaces": "iface, model, vendor, mac"
+  },
+  "dynamic": {
+    "time": "*",
+    "users": "user, date, time, ip",
+    "cpuCurrentSpeed": "min, avg, max, cores",
+    "cpuTemperature": "main",
+    "currentLoad": "currentLoad",
+    "mem": "active",
+    "battery": "voltage, percent",
+    "processes": "*",
+    "disksIO": "rIO_sec, wIO_sec, ms",
+    "networkInterfaces": "iface, ip4, ip4subnet, mac",
+    "networkStats": "iface, operstate, rx_sec, tx_sec"
+  }
+}

@@ -1,51 +1,99 @@
 import type { ServerWebSocket } from "bun";
-import { get } from "systeminformation";
-import { template } from "./template";
+import { getStaticData, getDynamicData } from "./data";
+import figlet from "figlet";
+
+let log = "";
+const delay = 10000;
+const clients = new Set<ServerWebSocket<unknown>>();
 
 let interval: NodeJS.Timeout;
-const clients = new Set<ServerWebSocket<unknown>>();
+let scrapping = false;
 
 const server = Bun.serve({
   port: 3000,
+  hostname: "0.0.0.0",
+  development: true,
+
   routes: {
-    "/ws": (req) => {
+    "/stop": {
+      POST: (req) => {
+        process.kill(process.pid, "SIGINT");
+        return new Response("Server stopped");
+      },
+    },
+
+    "/dynamic": (req) => {
       if (server.upgrade(req)) return;
       return new Response("Upgrade Failed", { status: 400 });
     },
+
+    "/static": async (req) => {
+      const body = req.body;
+      console.log(body);
+      const data = await getStaticData();
+      return Response.json(data);
+    },
+
+    "/": (req): Response => {
+      return new Response(
+        `David is a little boy. ${server.requestIP(req)?.address}`,
+      );
+    },
   },
+
   websocket: {
-    open(ws) {
-      console.log("connection opened");
+    async open(ws) {
       clients.add(ws);
+      scrapping = true;
 
-      interval = setInterval(async () => {
-        const data = await get(template);
-
-        for (const socket of clients) {
-          socket.send(JSON.stringify(data));
-          console.log(`sent data to client`);
-        }
-      }, 10000);
+      menu();
     },
     message(ws) {},
     close(ws) {
       clients.delete(ws);
-      clearInterval(interval);
-      console.log("connection closed");
+      scrapping = false;
+
+      menu();
     },
   },
+
   fetch(req, server) {
     return new Response("Not Found", { status: 404 });
   },
 });
 
-console.log(`Listening on http://localhost:${server.port}`);
+interval = setInterval(async () => {
+  menu();
+  if (!scrapping) return;
 
-// graceful process interrupt
+  console.time("scrapping data");
+  const data = JSON.stringify(await getDynamicData());
+  console.timeEnd("scrapping data");
+
+  for (const socket of clients) {
+    socket.send(data);
+    console.log(`sent data to client ${socket.remoteAddress}`);
+  }
+}, delay);
+
+menu();
+
+// graceful process interruption
 process.on("SIGINT", async () => {
   clearInterval(interval);
   clients.clear();
   await server.stop(true);
-  console.log("Server stopped gracefully");
+  console.log("Server killed gracefully");
   process.exit();
 });
+
+async function menu() {
+  console.clear();
+  console.log(figlet.textSync("sysmon", { font: "Poison", width: 80 }));
+  console.log(
+    `Listening on http://localhost:${server.port}
+    \nRate: ${delay / 1000} sec
+    \nClients: ${clients.size} \n`,
+  );
+  console.log(`--- Logs ---`);
+}
