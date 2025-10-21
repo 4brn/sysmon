@@ -2,7 +2,6 @@ import type { ServerWebSocket } from "bun";
 import { getStaticData, getDynamicData } from "./data";
 import figlet from "figlet";
 
-let log = "";
 const delay = 10000;
 const clients = new Set<ServerWebSocket<unknown>>();
 
@@ -12,7 +11,7 @@ let scrapping = false;
 const server = Bun.serve({
   port: 3000,
   hostname: "0.0.0.0",
-  development: true,
+  development: false,
 
   routes: {
     "/stop": {
@@ -63,17 +62,15 @@ const server = Bun.serve({
 });
 
 interval = setInterval(async () => {
-  menu();
   if (!scrapping) return;
 
-  console.time("scrapping data");
+  console.time("transfered data");
   const data = JSON.stringify(await getDynamicData());
-  console.timeEnd("scrapping data");
 
   for (const socket of clients) {
     socket.send(data);
-    console.log(`sent data to client ${socket.remoteAddress}`);
   }
+  console.timeEnd("transfered data");
 }, delay);
 
 menu();
@@ -89,11 +86,13 @@ process.on("SIGINT", async () => {
 
 async function menu() {
   console.clear();
-  console.log(figlet.textSync("sysmon", { font: "Poison", width: 80 }));
+  console.log(figlet.textSync("sysmon2", { font: "Poison", width: 80 }));
   console.log(
-    `Listening on http://localhost:${server.port}
-    \nRate: ${delay / 1000} sec
-    \nClients: ${clients.size} \n`,
+    `
+Listening on http://localhost:${server.port}
+Rate: ${delay / 1000} sec
+Clients: ${clients.size}
+`,
   );
   console.log(`--- Logs ---`);
 }

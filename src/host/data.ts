@@ -34,19 +34,19 @@ import type {
 export async function getStaticData() {
   const data = await get(template.static);
   return {
-    // system: "model, manufacturer, virtual", // static
+    // system: "model, manufacturer, virtual"
     system: {
       model: data.system.model,
       vendor: data.system.manufacturer,
       virtual: data.system.virtual,
     },
-    // bios: "vendor, version, releaseDate", // static
+    // bios: "vendor, version, releaseDate"
     bios: {
       vendor: data.bios.vendor,
       version: data.bios.version,
       release: data.bios.releaseDate,
     },
-    // osInfo: "platform, distro, kernel, arch, hostname", // static
+    // osInfo: "platform, distro, kernel, arch, hostname"
     os: {
       platform: data.osInfo.platform,
       distro: data.osInfo.distro,
@@ -54,22 +54,22 @@ export async function getStaticData() {
       arch: data.osInfo.arch,
       hostname: data.osInfo.hostname,
     },
-    // cpu: "manufacturer, brand, physicalCores, cores", // static
+    // cpu: "manufacturer, brand, physicalCores, cores"
     cpu: {
       vendor: data.cpu.manufacturer,
       model: data.cpu.brand,
       cores: data.cpu.physicalCores,
       threads: data.cpu.cores,
     },
-    // mem: "total",
+    // mem: "total"
     mem: {
       total: Math.floor(data.mem.total),
     },
-    // battery: "hasBattery",
+    // battery: "hasBattery"
     battery: {
       hasBattery: data.battery.hasBattery,
     },
-    // diskLayout: "device, type, name, vendor, size", // static
+    // diskLayout: "device, type, name, vendor, size"
     disks: {
       layouts: data.diskLayout.map((dev: DiskLayout) => {
         return {
@@ -93,7 +93,7 @@ export async function getDynamicData(): Promise<DynamicData> {
       timezone: data.time.timezone,
       timezoneName: data.time.timezoneName,
     },
-    // users: "user, date, time, ip", // dynamic
+    // users: "user, date, time, ip"
     users: data.users.map((user: any) => {
       return {
         username: user.user,
@@ -104,9 +104,9 @@ export async function getDynamicData(): Promise<DynamicData> {
         ip: user.ip,
       } as User;
     }),
-    // cpuCurrentSpeed: "min, avg, max, cores", // dynamic
-    // cpuTemperature: "main", // dynamic
-    // currentLoad: "currentLoad", // dynamic
+    // cpuCurrentSpeed: "min, avg, max, cores"
+    // cpuTemperature: "main"
+    // currentLoad: "currentLoad"
     cpu: {
       usage: data.currentLoad.currentLoad,
       temperature: data.cpuTemperature.main,
@@ -115,7 +115,7 @@ export async function getDynamicData(): Promise<DynamicData> {
         cores: data.cpuCurrentSpeed.cores,
       },
     },
-    // mem: "active", // total is static, active is dynamic
+    // mem: "active"
     mem: {
       active: data.mem.active,
     },

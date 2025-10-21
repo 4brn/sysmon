@@ -7,14 +7,14 @@
     "dev": "bun run --watch index.ts"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "@types/systeminformation": "^3.54.1"
   },
   "peerDependencies": {
     "typescript": "^5"
   },
   "dependencies": {
     "figlet": "^1.9.3",
-    "picocolors": "^1.1.1",
     "systeminformation": "^5.27.11"
   }
 }
