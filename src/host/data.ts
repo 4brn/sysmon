@@ -119,12 +119,12 @@ export async function getDynamicData(): Promise<DynamicData> {
     mem: {
       active: data.mem.active,
     },
-    // battery: "voltage, percent", // hasBattery is static
+    // battery: "voltage, percent"
     battery: {
       percentage: data.battery.percent,
       voltage: data.battery.voltage,
     },
-    // processes: "list",
+    // processes: "list"
     processes: {
       all: data.processes.all,
       running: data.processes.running,
@@ -144,12 +144,12 @@ export async function getDynamicData(): Promise<DynamicData> {
         } as Process;
       }),
     },
-    // disksIO: "rIO_sec, wIO_sec, ms", // dynamic
+    // disksIO: "rIO_sec, wIO_sec, ms"
     disks: {
       read: data.disksIO.rIO_sec,
       write: data.disksIO.wIO_sec,
     },
-    // networkInterfaces: "iface, ip4, ip4subnet, mac", // static
+    // networkInterfaces: "iface, ip4, ip4subnet, mac"
     network: {
       inerfaces: data.networkInterfaces.map((iface: NetworkInterface) => {
         return {
@@ -159,7 +159,7 @@ export async function getDynamicData(): Promise<DynamicData> {
           mac: iface.mac,
         } as NetworkInterface;
       }),
-      // networkStats: "iface, operstate, rx_sec, tx_sec", // dynamic
+      // networkStats: "iface, operstate, rx_sec, tx_sec"
       stats: data.networkStats.map((iface: any) => {
         return {
           iface: iface.iface,

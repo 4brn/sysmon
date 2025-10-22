@@ -1,58 +1,74 @@
-import type { ServerWebSocket } from "bun";
 import { getStaticData, getDynamicData } from "./data";
 import figlet from "figlet";
 
 const delay = 10000;
-const clients = new Set<ServerWebSocket<unknown>>();
-
-let interval: NodeJS.Timeout;
+const port = 3000;
 let scrapping = false;
 
+enum TYPES {
+  static = "static",
+  dynamic = "dynamic",
+}
+const buffer: { static: string; dynamic: string } = {
+  static: "",
+  dynamic: "",
+};
+
+menu();
+
 const server = Bun.serve({
-  port: 3000,
+  port: port,
   hostname: "0.0.0.0",
-  development: false,
+  development: true,
 
   routes: {
-    "/stop": {
-      POST: (req) => {
-        process.kill(process.pid, "SIGINT");
-        return new Response("Server stopped");
-      },
-    },
-
-    "/dynamic": (req) => {
+    "/": (req) => {
       if (server.upgrade(req)) return;
       return new Response("Upgrade Failed", { status: 400 });
-    },
-
-    "/static": async (req) => {
-      const body = req.body;
-      console.log(body);
-      const data = await getStaticData();
-      return Response.json(data);
-    },
-
-    "/": (req): Response => {
-      return new Response(
-        `David is a little boy. ${server.requestIP(req)?.address}`,
-      );
     },
   },
 
   websocket: {
     async open(ws) {
-      clients.add(ws);
+      ws.subscribe("stream");
       scrapping = true;
+      console.log("client connected:", ws.remoteAddress);
 
-      menu();
+      const date = new Date().toLocaleString();
+      console.time(`[STATIC] ${date}`);
+      ws.send(buffer.static);
+      console.timeEnd(`[STATIC] ${date}`);
+
+      console.time(`[DYNAMIC] ${date}`);
+      ws.send(buffer.dynamic);
+      console.timeEnd(`[DYNAMIC] ${date}`);
     },
-    message(ws) {},
-    close(ws) {
-      clients.delete(ws);
-      scrapping = false;
 
-      menu();
+    async message(ws, message) {
+      const date = new Date().toLocaleString();
+      switch (message) {
+        case "static":
+          console.time(`[STATIC] ${date}`);
+          const data = JSON.stringify({
+            type: TYPES.static,
+            data: await getStaticData(),
+          });
+          ws.send(data);
+          console.timeEnd(`[STATIC] ${date}`);
+
+          buffer.static = data;
+          break;
+
+        case "kill":
+          console.log(`[KILL] [${ws.remoteAddress}] ${date}`);
+          process.kill(process.pid, "SIGINT");
+          break;
+      }
+    },
+
+    close(ws) {
+      scrapping = false;
+      console.log("connection closed:", ws.remoteAddress);
     },
   },
 
@@ -61,38 +77,50 @@ const server = Bun.serve({
   },
 });
 
-interval = setInterval(async () => {
+const scrapeInterval = setInterval(async () => {
   if (!scrapping) return;
+  const date = new Date().toLocaleString();
 
-  console.time("transfered data");
-  const data = JSON.stringify(await getDynamicData());
+  console.time(`[DYNAMIC] ${date}`);
+  const data = JSON.stringify({
+    type: TYPES.dynamic,
+    data: await getDynamicData(),
+  });
+  server.publish("stream", data);
+  console.timeEnd(`[DYNAMIC] ${date}`);
 
-  for (const socket of clients) {
-    socket.send(data);
-  }
-  console.timeEnd("transfered data");
+  buffer.dynamic = data;
 }, delay);
-
-menu();
 
 // graceful process interruption
 process.on("SIGINT", async () => {
-  clearInterval(interval);
-  clients.clear();
+  clearInterval(scrapeInterval);
   await server.stop(true);
   console.log("Server killed gracefully");
   process.exit();
 });
 
-async function menu() {
+function menu() {
   console.clear();
-  console.log(figlet.textSync("sysmon2", { font: "Poison", width: 80 }));
   console.log(
-    `
-Listening on http://localhost:${server.port}
-Rate: ${delay / 1000} sec
-Clients: ${clients.size}
-`,
+    figlet.textSync("sysmon2", { font: "Poison", width: 80 }),
+    `\nListening on http://localhost:${port}\nRate: ${delay / 1000} sec\n\n--- Logs ---\n`,
   );
-  console.log(`--- Logs ---`);
 }
+
+// seeding speeds up first websocket transfer when connected
+// for a initial startup delay
+const seedBuffer = async () => {
+  buffer.static = JSON.stringify({
+    type: TYPES.static,
+    data: await getStaticData(),
+  });
+  buffer.dynamic = JSON.stringify({
+    type: TYPES.dynamic,
+    data: await getDynamicData(),
+  });
+
+  console.log("seeded buffer");
+};
+
+seedBuffer();
