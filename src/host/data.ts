@@ -84,7 +84,7 @@ export async function getStaticData() {
   } as StaticData;
 }
 
-export async function getDynamicData(): Promise<DynamicData> {
+export async function getDynamicData() {
   const data = await get(template.dynamic);
   return {
     time: {

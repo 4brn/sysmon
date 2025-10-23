@@ -1,3 +1,13 @@
+export interface SysmonStaticResponse {
+  type: "static";
+  data: StaticData;
+}
+
+export interface SysmonDynamicResponse {
+  type: "dynamic";
+  data: DynamicData;
+}
+
 export interface DiskLayout {
   device: string;
   type: string;
