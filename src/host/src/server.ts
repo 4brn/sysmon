@@ -1,13 +1,12 @@
 import { serve } from "bun";
 import { getStaticData, getDynamicData } from "./data";
 import figlet from "figlet";
-import type { SysmonDynamicResponse, SysmonStaticResponse } from "./types";
+import type { SysmonResponse } from "shared/types";
 
 let clients = 0;
 const delay = 10000;
 const port = 3000;
 const isProd = process.env.BUILD === "production";
-let scrapping = false;
 
 // seed buffer with information for faster first response
 const buffer: { static: string; dynamic: string } = {
@@ -30,11 +29,9 @@ const server = serve({
   websocket: {
     async open(ws) {
       ws.subscribe("stream");
-      scrapping = true;
       clients++;
 
-      console.log("client connected:", ws.remoteAddress);
-      console.log("clients:", clients);
+      console.log(`client connected [${clients}]:`, ws.remoteAddress);
 
       const date = new Date().toLocaleString();
       console.time(`[STATIC] ${date}`);
@@ -56,9 +53,7 @@ const server = serve({
 
     close(ws) {
       clients--;
-      scrapping = false;
-      console.log("connection closed:", ws.remoteAddress);
-      console.log("clients:", clients);
+      console.log(`connection closed [${clients}]:`, ws.remoteAddress);
     },
   },
 
@@ -76,7 +71,7 @@ const scrapeInterval = setInterval(async () => {
   const data = JSON.stringify({
     type: "dynamic",
     data: await getDynamicData(),
-  } as SysmonDynamicResponse);
+  } as SysmonResponse);
   server.publish("stream", data);
   console.timeEnd(`[DYNAMIC] ${date}`);
 }, delay);
@@ -100,5 +95,5 @@ console.log(
 buffer.static = JSON.stringify({
   type: "static",
   data: await getStaticData(),
-} as SysmonStaticResponse);
+} as SysmonResponse);
 console.log("buffer seeded");

@@ -1,16 +1,11 @@
-export interface SysmonStaticResponse {
-  type: "static";
-  data: StaticData;
-}
-
-export interface SysmonDynamicResponse {
-  type: "dynamic";
-  data: DynamicData;
+export interface SysmonResponse {
+  type: "static" | "dynamic";
+  data: StaticData | DynamicData;
 }
 
 export interface DiskLayout {
   device: string;
-  type: string;
+  deviceType: string;
   name: string;
   vendor: string;
   size: number;
@@ -126,7 +121,7 @@ export interface DynamicData {
     write: number | null;
   };
   network: {
-    inerfaces: NetworkInterface[];
+    interfaces: NetworkInterface[];
     stats: NetworkStats[];
   };
 }

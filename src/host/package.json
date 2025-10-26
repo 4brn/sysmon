@@ -1,10 +1,10 @@
 {
   "name": "host",
-  "module": "index.js",
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "bun run --watch index.ts"
+    "dev": "bun --watch src/server.ts",
+    "start": "BUILD=production bun src/server.ts"
   },
   "devDependencies": {
     "@types/bun": "latest",

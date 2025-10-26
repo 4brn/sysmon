@@ -9,7 +9,7 @@ import type {
   Process,
   NetworkInterface,
   NetworkStats,
-} from "./types";
+} from "shared/types";
 
 // ---------  ALL DATA COLLECTED ---------
 // "system": "model, manufacturer, virtual",
@@ -74,7 +74,7 @@ export async function getStaticData() {
       layouts: data.diskLayout.map((dev: DiskLayout) => {
         return {
           device: dev.device,
-          deviceType: dev.type,
+          deviceType: dev.deviceType,
           name: dev.name,
           vendor: dev.vendor,
           size: dev.size,
@@ -151,7 +151,7 @@ export async function getDynamicData() {
     },
     // networkInterfaces: "iface, ip4, ip4subnet, mac"
     network: {
-      inerfaces: data.networkInterfaces.map((iface: NetworkInterface) => {
+      interfaces: data.networkInterfaces.map((iface: NetworkInterface) => {
         return {
           iface: iface.iface,
           ip4: iface.ip4,
