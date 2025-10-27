@@ -1,0 +1,63 @@
+:root {
+    font-size: 18px;
+}
+
+* {
+    font-family:
+        JetBrains Mono,
+        monospace;
+}
+
+body {
+    nav {
+        #logo {
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+
+            #ip {
+                font-size: 1.2rem;
+            }
+        }
+
+        #connected {
+            margin-top: 0.35rem;
+            width: 0.8rem;
+            height: 0.8rem;
+            border-radius: 1rem;
+            background-color: red;
+        }
+    }
+
+    main {
+        padding: 0rem;
+
+        summary {
+            font-size: 1.5rem;
+            font-weight: bold;
+            font-style: italic;
+        }
+
+        .info-box {
+            padding-top: 5px;
+            border-bottom: 1px dotted mediumpurple;
+
+            gap: 1rem;
+
+            .label {
+                font-size: 1rem;
+            }
+
+            .info {
+                text-align: right;
+            }
+        }
+
+        #process-div {
+            max-height: 50vh;
+        }
+    }
+
+    footer {
+        text-align: center;
+    }
+}

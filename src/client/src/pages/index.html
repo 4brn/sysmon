@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en" id="root" data-theme="light">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!--<link rel="icon" type="image/svg+xml" href="./logo.svg" />-->
+        <link
+            rel="shortcut icon"
+            href="../public/favicon.ico"
+            type="image/x-icon"
+        />
+        <link rel="icon" href="../public/favicon.ico" type="image/x-icon" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="css/index.css" />
+        <link rel="stylesheet" href="css/pico.min.css" />
+        <title>Sysmon</title>
+    </head>
+    <body class="container">
+        <header>
+            <nav>
+                <ul>
+                    <li>
+                        <h2 id="logo">Sysmon<sub id="ip"></sub></h2>
+                    </li>
+                </ul>
+                <ul>
+                    <li>
+                        <div id="connected"></div>
+                    </li>
+                    <li>
+                        <button class="outline contrast" id="connect">
+                            Connect
+                        </button>
+                    </li>
+                    <li hidden id="refresh-container">
+                        <button class="outline contrast" id="refresh">
+                            Refresh
+                        </button>
+                    </li>
+                    <li>
+                        <button class="outline contrast" id="theme">
+                            Theme
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <article>
+                <div role="group" class="info-box">
+                    <strong class="label">Current time</strong>
+                    <span class="info" id="time.current">Loading ...</span>
+                </div>
+                <div role="group" class="info-box">
+                    <strong class="label">Uptime</strong>
+                    <span class="info" id="time.uptime">Loading ...</span>
+                </div>
+            </article>
+
+            <!--system-->
+            <details closed>
+                <summary role="button" class="outline contrast">System</summary>
+                <article>
+                    <div class="info-box" role="group">
+                        <strong class="label">Device</strong>
+                        <p class="info">
+                            <span id="system.vendor"></span>
+                            <span id="system.model"></span>
+                        </p>
+                    </div>
+                    <div class="info-box" role="group">
+                        <strong class="label">Virtual</strong>
+                        <p class="info">
+                            <span id="system.virtual"></span>
+                        </p>
+                    </div>
+                    <div class="info-box" role="group">
+                        <strong class="label">Bios</strong>
+                        <p class="info">
+                            <span id="bios.vendor"></span>
+                            v<span id="bios.version"></span>
+                        </p>
+                    </div>
+                    <div class="info-box" role="group">
+                        <strong class="label">OS</strong>
+                        <p class="info">
+                            <span id="os.platform"></span>
+                            (<span id="os.distro"></span>)
+                        </p>
+                    </div>
+                    <div class="info-box" role="group">
+                        <strong class="label">Timezone</strong>
+                        <p class="info">
+                            <span id="time.timezoneName"></span>
+                            (<span id="time.timezone"></span>)
+                        </p>
+                    </div>
+                </article>
+            </details>
+
+            <!--users-->
+            <details closed>
+                <summary role="button" class="outline contrast">Users</summary>
+                <article>
+                    <div class="overflow-auto">
+                        <table class="striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Username</th>
+                                    <th scope="col">IP</th>
+                                    <th scope="col">Time</th>
+                                    <th scope="col">Date</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users.list"></tbody>
+                        </table>
+                    </div>
+                </article>
+            </details>
+
+            <!--cpu-->
+            <details closed>
+                <summary role="button" class="outline contrast">Cpu</summary>
+                <article>
+                    <div class="info-box" role="group">
+                        <strong class="label">Manufacturer</strong>
+                        <p class="info">
+                            <span id="cpu.vendor"></span>
+                        </p>
+                    </div>
+                    <div class="info-box" role="group">
+                        <strong class="label">Model</strong>
+                        <p class="info">
+                            <span id="cpu.model"></span>
+                        </p>
+                    </div>
+                    <div class="info-box" role="group">
+                        <strong class="label">Cores</strong>
+                        <p class="info">
+                            <span id="cpu.cores"></span>
+                        </p>
+                    </div>
+                    <div class="info-box" role="group">
+                        <strong class="label">Threads</strong>
+                        <p class="info">
+                            <span id="cpu.threads"></span>
+                        </p>
+                    </div>
+                    <div class="info-box" role="group">
+                        <strong class="label">Temperature</strong>
+                        <p class="info">
+                            <span id="cpu.temperature"></span>
+                        </p>
+                    </div>
+                    <div class="info-box" role="group">
+                        <strong class="label">Usage</strong>
+                        <p class="info">
+                            <span id="cpu.usage"></span>
+                        </p>
+                    </div>
+                    <div class="info-box" role="group">
+                        <strong class="label">Clock Speed</strong>
+                        <p class="info">
+                            <span id="cpu.speed"></span>
+                        </p>
+                    </div>
+                    <details closed>
+                        <summary role="button" class="outline secondary">
+                            All Cores
+                        </summary>
+                        <div class="overflow-auto">
+                            <table class="striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Core</th>
+                                        <th scope="col">Speed (GHz)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="cpu.coreSpeeds"></tbody>
+                            </table>
+                        </div>
+                    </details>
+                </article>
+            </details>
+
+            <!--memory-->
+            <details closed>
+                <summary role="button" class="outline contrast">Memory</summary>
+                <article>
+                    <div class="info-box" role="group">
+                        <strong class="label">Used</strong>
+                        <p class="info"><span id="mem.active"></span> GB</p>
+                    </div>
+                    <div class="info-box" role="group">
+                        <strong class="label">Total</strong>
+                        <p class="info"><span id="mem.total"></span> GB</p>
+                    </div>
+                </article>
+            </details>
+
+            <!--battery-->
+            <details closed id="battery-container">
+                <summary role="button" class="outline contrast">
+                    Battery
+                </summary>
+                <article>
+                    <div class="info-box" role="group">
+                        <strong class="label">Percentage</strong>
+                        <p class="info">
+                            <span id="battery.percentage"></span> %
+                        </p>
+                    </div>
+                    <div class="info-box" role="group">
+                        <strong class="label">Voltage</strong>
+                        <p class="info"><span id="battery.voltage"></span> V</p>
+                    </div>
+                </article>
+            </details>
+
+            <!--disks-->
+            <details closed>
+                <summary role="button" class="outline contrast">Disks</summary>
+                <article>
+                    <div class="info-box" role="group">
+                        <strong class="label">Read</strong>
+                        <p class="info"><span id="disks.read"></span> B/s</p>
+                    </div>
+                    <div class="info-box" role="group">
+                        <strong class="label">Write</strong>
+                        <p class="info"><span id="disks.write"></span> B/s</p>
+                    </div>
+                    <strong role="group" class="label">Layouts</strong>
+                    <div id="disks.layouts"></div>
+                </article>
+            </details>
+
+            <!--network-->
+            <details closed>
+                <summary role="button" class="outline contrast">
+                    Network
+                </summary>
+                <article>
+                    <div class="overflow-auto" id="process-div">
+                        <table class="striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Interface</th>
+                                    <th scope="col">IPv4</th>
+                                    <th scope="col">Mac</th>
+                                    <th scope="col">Subnet</th>
+                                    <th scope="col">Recieved B/s</th>
+                                    <th scope="col">Transfered B/s</th>
+                                </tr>
+                            </thead>
+                            <tbody id="network.list"></tbody>
+                        </table>
+                    </div>
+                </article>
+            </details>
+
+            <!--processes-->
+            <details closed>
+                <summary role="button" class="outline contrast">
+                    Processes
+                </summary>
+                <article>
+                    <div class="info-box" role="group">
+                        <strong class="label">All</strong>
+                        <p class="info"><span id="processes.all"></span></p>
+                    </div>
+                    <div class="info-box" role="group">
+                        <strong class="label">Sleeping</strong>
+                        <p class="info">
+                            <span id="processes.sleeping"></span>
+                        </p>
+                    </div>
+                    <details closed>
+                        <summary role="button" class="outline contrast">
+                            All Processes
+                        </summary>
+                        <div class="overflow-auto" id="process-div">
+                            <table class="striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Pid</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">User</th>
+                                        <th scope="col">Memory%</th>
+                                        <th scope="col">Cpu%</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="processes.list"></tbody>
+                            </table>
+                        </div>
+                    </details>
+                </article>
+            </details>
+        </main>
+        <footer>Made by 4brn</footer>
+        <script type="module" src="script.js"></script>
+    </body>
+</html>

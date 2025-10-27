@@ -44,15 +44,13 @@ export async function getStaticData() {
     bios: {
       vendor: data.bios.vendor,
       version: data.bios.version,
-      release: data.bios.releaseDate,
     },
-    // osInfo: "platform, distro, kernel, arch, hostname"
+    // osInfo: "platform, distro, kernel, arch "
     os: {
       platform: data.osInfo.platform,
       distro: data.osInfo.distro,
       kernel: data.osInfo.kernel,
       arch: data.osInfo.arch,
-      hostname: data.osInfo.hostname,
     },
     // cpu: "manufacturer, brand, physicalCores, cores"
     cpu: {
@@ -63,7 +61,7 @@ export async function getStaticData() {
     },
     // mem: "total"
     mem: {
-      total: Math.floor(data.mem.total),
+      total: data.mem.total,
     },
     // battery: "hasBattery"
     battery: {
@@ -74,7 +72,7 @@ export async function getStaticData() {
       layouts: data.diskLayout.map((dev: DiskLayout) => {
         return {
           device: dev.device,
-          deviceType: dev.deviceType,
+          deviceType: dev.type,
           name: dev.name,
           vendor: dev.vendor,
           size: dev.size,
@@ -127,20 +125,14 @@ export async function getDynamicData() {
     // processes: "list"
     processes: {
       all: data.processes.all,
-      running: data.processes.running,
       sleeping: data.processes.sleeping,
-      blocked: data.processes.blocked,
-      unknown: data.processes.unknown,
       list: data.processes.list.map((process: any) => {
         return {
           pid: process.pid,
-          parent: process.parentPid,
           name: process.name,
           user: process.user,
           mem: process.mem,
           cpu: process.cpu,
-          started: process.started,
-          state: process.state,
         } as Process;
       }),
     },

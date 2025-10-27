@@ -1,5 +1,5 @@
 import { serve } from "bun";
-import index from "./index.html";
+import index from "./pages/index.html";
 
 const isProd = process.env.BUILD === "production";
 

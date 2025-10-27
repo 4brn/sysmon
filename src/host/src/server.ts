@@ -4,7 +4,7 @@ import figlet from "figlet";
 import type { SysmonResponse } from "shared/types";
 
 let clients = 0;
-const delay = 10000;
+const delay = 60000;
 const port = 3000;
 const isProd = process.env.BUILD === "production";
 
@@ -33,19 +33,32 @@ const server = serve({
 
       console.log(`client connected [${clients}]:`, ws.remoteAddress);
 
-      const date = new Date().toLocaleString();
+      let date = new Date().toLocaleString();
       console.time(`[STATIC] ${date}`);
       ws.send(buffer.static);
       console.timeEnd(`[STATIC] ${date}`);
+
+      date = new Date().toLocaleString();
+      console.time(`[DYNAMIC] ${date}`);
+      ws.send(
+        JSON.stringify({ type: "dynamic", data: await getDynamicData() }),
+      );
+      console.timeEnd(`[DYNAMIC] ${date}`);
     },
 
     async message(ws, message) {
+      const date = new Date().toLocaleString();
       switch (message) {
+        case "dynamic":
+          console.time(`[DYNAMIC] ${date}`);
+          ws.send(
+            JSON.stringify({ type: "dynamic", data: await getDynamicData() }),
+          );
+          console.timeEnd(`[DYNAMIC] ${date}`);
+          break;
         case "kill":
           ws.send("server killed");
-          console.log(
-            `[KILL] [${ws.remoteAddress}] ${new Date().toLocaleString()}`,
-          );
+          console.log(`[KILL] [${ws.remoteAddress}] ${date}`);
           process.kill(process.pid, "SIGINT");
           break;
       }

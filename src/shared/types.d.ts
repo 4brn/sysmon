@@ -5,7 +5,7 @@ export interface SysmonResponse {
 
 export interface DiskLayout {
   device: string;
-  deviceType: string;
+  type: string;
   name: string;
   vendor: string;
   size: number;
@@ -20,14 +20,12 @@ export interface StaticData {
   bios: {
     vendor: string;
     version: string;
-    release: string;
   };
   os: {
     platform: string;
     distro: string;
     kernel: string;
     arch: string;
-    hostname: string;
   };
   cpu: {
     vendor: string;
@@ -57,17 +55,13 @@ export interface User {
 
 export interface Process {
   pid: number;
-  parent: number;
   name: string;
   cpu: number;
   mem: number;
-  priority: number;
-  nice: number;
   started: {
     date: string;
     time: string;
   };
-  state: string;
   user: string;
 }
 
@@ -112,8 +106,6 @@ export interface DynamicData {
     all: number;
     running: number;
     sleeping: number;
-    blocked: number;
-    unknown: number;
     list: Process[];
   };
   disks: {

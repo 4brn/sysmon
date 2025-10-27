@@ -1,7 +1,7 @@
 {
   "static": {
     "system": "model, manufacturer, virtual",
-    "bios": "vendor, version, releaseDate",
+    "bios": "vendor, version",
     "osInfo": "platform, distro, kernel, arch, hostname",
     "cpu": "manufacturer, brand, physicalCores, cores",
     "mem": "total",
