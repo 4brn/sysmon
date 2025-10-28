@@ -1,5 +1,8 @@
 import { serve } from "bun";
 import index from "./pages/index.html";
+import notFound from "./pages/404/index.html";
+
+console.clear();
 
 const isProd = process.env.BUILD === "production";
 
@@ -9,9 +12,16 @@ const server = serve({
   development: isProd ? false : true,
 
   routes: {
-    "/*": index,
+    "/": index,
+    "/*": notFound,
   },
 });
 
-console.clear();
+// graceful process interruption
+process.on("SIGINT", async () => {
+  await server.stop(true);
+  console.log("Server killed gracefully");
+  process.exit();
+});
+
 console.log(`Server running at ${server.url}`);

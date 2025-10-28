@@ -4,6 +4,7 @@ const url = "ws://127.0.0.1:3000";
 const ip = url.slice(5, url.length - 5);
 let socket;
 
+const root = document.getElementById("root");
 const refreshContainer = document.getElementById("refresh-container");
 const refreshButton = document.getElementById("refresh");
 const connectivityButton = document.getElementById("connect");
@@ -18,7 +19,6 @@ refreshButton.onclick = () => socket.send("dynamic");
 connectivityButton.onclick = () => connect(url);
 
 theme.onclick = () => {
-  const root = document.getElementById("root");
   const theme = root.getAttribute("data-theme") === "light" ? "dark" : "light";
 
   root.setAttribute("data-theme", theme);
