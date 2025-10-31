@@ -1,238 +1,121 @@
-# Analysis - Monitoring System
+## Analysis
 
-**Name**: Aleksandar Rangelov
-**Student Number**: [Your Student Number]
+**Name:** Aleksandar Rangelov
+**Student Number:** 572601
 
-## Table of Contents
+### Table of Contents
 
-1. [Introduction](#introduction)
-2. [Main Question](#main-question)
-3. [Technology Comparison](#technology-comparison)
-   - [Runtime Environments](#runtime-environments)
-   - [Web Frameworks](#web-frameworks)
-   - [Database Solutions](#database-solutions)
-   - [Frontend Approaches](#frontend-approaches)
-   - [VPN Solutions](#vpn-solutions)
-4. [Conclusion](#conclusion)
+[TOC]
 
-## Introduction
+### 1. Project Description
 
-This document analyzes various solutions for the development of the project. The goal is to minimize dependencies, while still creating a lightweight and efficient tech stack that provides ease of use, speed and maintainability.
+Sysmon is a real-time system monitoring platform that displays hardware, software and performance metrics of a device. Users can view CPU usage, memory consumption, disk activity, network statistics, and running processes through a web-based dashboard accessible from any device on the local network.
 
-## Main Question
+**Key Features:**
 
-How to create a lightweight, real-time monitoring system with minimal dependencies?
+- Display static hardware information (CPU model, memory capacity, disk layouts)
+- Monitor dynamic metrics (CPU usage, temperature, active processes, network traffic)
+- Support multiple concurrent viewers
+- Responsive web interface with theme customization
 
-## Technology Stack
+### 2. Requirements
 
-### Runtime Environments
+#### 2.1 Functional Requirements
 
-> Software platform that provides an environment for executing code.
+1. Collect system information from the host machine
+1. Send real-time data to connected clients
+1. Display metrics (CPU, memory, battery, etc.)
+1. List active processes with resource allocation
+1. Monitor network interface statistics
+1. Support theme switching (light/dark mode)
+1. Handle multiple simultaneous client connections
 
-#### Bun [^1]
+#### 2.2 Non-Functional Requirements
 
-Modern JavaScript runtime with built-in WebSocket, SQLite, and HTTP server support.
+- **Performance:** Update frequency between 10-30 seconds for monitoring without excessive overhead
+- **Accessibility:** Zero-configuration access from any browser on the network
+- **Scalability:** Support multiple concurrent viewers without performance degradation
+- **Usability:** Easily accessible information, minimal learning curve
 
-| Feature | Specification |
-|---------|--------------|
-| Performance | 4x faster than Node.js |
-| Built-in APIs | HTTP, WebSocket, SQLite, bundler |
+#### 2.3 User Stories
 
-**Advantages:**
-- Native WebSocket and SQLite (no external libraries)
-- Extremely fast startup and execution
-- Single binary distribution
-- TypeScript support built-in
+- As a developer, I want to monitor my system resources while coding, so I can identify performance bottlenecks.
+- As a system administrator, I want to monitor all machines from one dashboard, so I can manage infrastructure efficiently.
+- As a user, I want automatic updates without page refresh, so I can see changes in real-time.
+- As a mobile user, I want to check system status from my phone, so I can monitor remotely.
 
-**Disadvantages:**
-- Newer ecosystem (less mature)
-- Occasional compatibility issues
+### 3. Technical Stack
 
-#### Node.js [^2]
+#### 3.1 Host
 
-**Advantages:**
-- Mature and battle-tested
-- Extensive package ecosystem
+> Host acts as a backend. Consists of  a scraping agent, responsible for gathering metrics and a web server for communication with clients.
 
-**Disadvantages:**
-- Requires external packages for WebSocket and SQLite
-- Slower performance
-- More complex setup
+##### 3.1.1 Bun[^1]
 
-#### Deno [^3]
+> Bun is a modern JavaScript runtime, written in Zig. It aims to replace outdated runtimes like node and values speed and developer experience.
 
-**Disadvantages:**
-- Different module system (URLs vs npm)
-- Smaller ecosystem
-- Less streamlined WebSocket/SQLite support
+- Built-in WebSocket support
+- Significantly faster I/O operations than Node.js
+- Native TypeScript support
+- Lightweight with minimal dependencies
 
-### Web Frameworks
+##### 3.1.2 systeminformation[^2]
 
-#### No Framework (Native APIs)
+> systeminformation is a library for retrieving detailed hardware, system and OS information.
 
-Using runtime's built-in HTTP server without additional frameworks.
-
-**Advantages:**
+- Cross-platform: MacOS, Windows, Linux, Android, etc.
+- Actively maintained with regular updates
 - Zero dependencies
-- Maximum performance
-- Direct control
-- Perfect for simple APIs (2-3 endpoints)
+- 100% JavaScript
 
-**Disadvantages:**
-- Manual routing
-- No built-in middleware
+After an indepth research of the library I found out that the returned metrics are not structured with readability in mind. Moreover there is a lot of irrelevant information included. It would be advisory to create a custom return object, containing only relevant information, structured in a semantic and readable way. Luckly, systeminformation allows for filtering metrics data.
 
-#### Hono [^4]
+##### 3.1.3 WebSocket Protocol [^3]
 
-Lightweight web framework (~20KB).
+> The WebSocket Protocol uses HTTP to create a TCP connection between devices.
 
-**Advantages:**
-- Clean routing API
-- Middleware support
-- Cross-runtime compatible
+- Real-time bidirectional communication
+- Lower overhead than HTTP polling
+- Native browser support
+- Efficient for streaming continuous data updates
 
-**Disadvantages:**
-- Additional dependency
-- Unnecessary for simple projects
+#### 3.2 Frontend
 
-#### Express.js [^5]
+##### 3.2.1 JavaScript
 
-**Disadvantages:**
-- Heavier than needed
-- Older design patterns
-- Less optimal on Bun
+- Direct DOM manipulation for maximum performance
+- No build/compilation required 
+- Easy to understand and maintain
 
-### Database Solutions
+##### 3.2.2 Pico CSS [^4]
 
-#### SQLite (Native) [^6]
+- Lightweight CSS framework (< 10KB)
+- Semantic HTML styling
+- Built-in dark mode support
+- Responsive design without custom media queries
 
-Serverless, embedded SQL database.
+### 4. Advice
 
-**Advantages:**
-- Zero configuration
-- Perfect for local storage
-- Excellent for time-series data
-- File-based (easy backups)
-- Fast synchronous API
+#### 4.1 Configuration
 
-**Disadvantages:**
-- Not for concurrent writes (not relevant here)
+Use environment variables for deployment flexibility:
 
-#### Drizzle ORM [^7]
+- WebSocket URL configuration
+- Update interval timing
+- Port numbers for both servers
+- Production/development mode switching
 
-TypeScript ORM with type-safe queries.
+#### 4.2 Optimization
 
-**Advantages:**
-- Type safety
-- Migration management
+- Implement data caching for expensive operations
+- Lazy load non-critical information in collapsed sections
 
-**Disadvantages:**
-- Additional dependency
-- Performance overhead
-- Unnecessary for simple INSERT/SELECT
+### 5. Conclusion
 
-#### PostgreSQL/MySQL
+Sysmon's architecture prioritizes simplicity and performance through careful technology selection. The combination of Bun's speed, WebSocket's efficiency, and minimal frontend dependencies creates a lightweight monitoring solution suitable for personal and professional use. The modular design allows for future enhancements without architectural changes.
 
-**Disadvantages:**
-- Requires separate server
-- Overkill for local storage
-- Additional maintenance
-- Network latency
+[^1]: Bun documentation. (n.d.). Retrieved October 6th, 2025, from [bun.sh](https://bun.sh)
+[^2]: systeminformation documentation. (n.d.). Retrieved October 6, 2025, from  [systeminformation.io](https://systeminformation.io/)
 
-### Frontend Approaches
-
-#### Vanilla JavaScript + Pico CSS
-
-Plain JavaScript with Pico CSS framework.
-
-**Advantages:**
-- No build step
-- Instant reload
-- Simple mental model
-- Beautiful styling with minimal markup
-- CDN delivery
-
-**Disadvantages:**
-- Manual DOM updates (acceptable for simple UI)
-
-#### React [^8]
-
-**Disadvantages:**
-- Requires build tooling
-- Additional complexity
-- Overkill for simple dashboard
-- Slower development iteration
-
-#### Chart.js [^9]
-
-Simple charting library.
-
-**Advantages:**
-- Simple API
-- Good real-time performance
-- CDN availability
-- Sufficient for metrics visualization
-
-### VPN Solutions
-
-#### Tailscale [^10]
-
-Zero-config VPN based on WireGuard.
-
-**Advantages:**
-- Zero configuration
-- No port forwarding required
-- Magic DNS
-- Free for personal use
-- 5-minute setup
-- Works across NAT/firewalls
-
-**Disadvantages:**
-- Requires trust in Tailscale infrastructure
-
-#### WireGuard [^11]
-
-**Disadvantages:**
-- Manual configuration
-- Complex multi-device setup
-
-#### OpenVPN [^12]
-
-**Disadvantages:**
-- Complex configuration
-- Slower than WireGuard
-- Certificate management
-
-## Conclusion
-
-**Selected Stack:**
-
-| Component | Technology | Reason |
-|-----------|-----------|--------|
-| Runtime | Bun | Native WebSocket, SQLite, HTTP; superior performance |
-| Framework | None | Simple routing needs don't justify overhead |
-| Database | SQLite (native) | Perfect for local time-series storage |
-| ORM | None | Raw SQL is sufficient and faster |
-| Frontend | Vanilla JS | No build step, direct control |
-| Styling | Pico CSS (CDN) | Beautiful with minimal markup |
-| Charts | Chart.js (CDN) | Simple API, good performance |
-| VPN | Tailscale | Zero-config, perfect for homelab |
-
-**Total Dependencies:** 1 npm package (systeminformation)
-
-This minimal stack maximizes learning value (focus on WebSockets and networking rather than framework abstractions) while delivering a lightweight, production-ready homelab tool within the 3-week timeline. The absence of build steps, complex tooling, and unnecessary abstractions aligns perfectly with the project's simplicity requirements.
-
----
-
-[^1]: Bun - https://bun.sh/
-[^2]: Node.js - https://nodejs.org/
-[^3]: Deno - https://deno.land/
-[^4]: Hono - https://hono.dev/
-[^5]: Express.js - https://expressjs.com/
-[^6]: SQLite - https://www.sqlite.org/
-[^7]: Drizzle ORM - https://orm.drizzle.team/
-[^8]: React - https://react.dev/
-[^9]: Chart.js - https://www.chartjs.org/
-[^10]: Tailscale - https://tailscale.com/
-[^11]: WireGuard - https://www.wireguard.com/
-[^12]: OpenVPN - https://openvpn.net/
+[^3]: Websocket specification. (n.d.) Retrieved Octoboer 6, 2025, from [websockets.spec.whatwg.org](https://websockets.spec.whatwg.org/)
+[^4]: Pico CSS website. (n.d.) Retrieved October 6, 2025, from [picocss.com](https://picocss.com/)

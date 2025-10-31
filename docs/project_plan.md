@@ -1,213 +1,165 @@
-# Project Plan
+## Project Plan
 
-**Student Name**: [Your Name]
-**Student Number**: [Your Student Number]
+**Student name**: Aleksandar Rangelov
+**Student number**: 572 601
 
-## Table of Contents
+### Table of Contents
 
-1. [Introduction](#introduction)
-2. [Objective](#objective)
-3. [Main Question](#main-question)
-4. [MoSCoW Method](#moscow-method)
-5. [SWOT Analysis](#swot-analysis)
-6. [Stakeholders](#stakeholders)
-7. [Planning](#planning)
-8. [Learning Outcomes](#learning-outcomes)
-9. [Conclusion](#conclusion)
+[TOC]
 
-## Introduction
+### 1. Introduction
 
-The aim of the project is to create a real-time system monitoring dashboard for homelab environments. The system will collect performance metrics from multiple machines and display them in a centralized web interface, enabling remote monitoring and historical data analysis.
+The aim of the project is to create a solution for monitoring devices in local network environments. Software will collect system metrics from multiple devices and display them in a centralized user interface, enabling devices to be monitored remotely.
 
-## Objective
+### 2. Objective
 
-The main objective is to create a lightweight, efficient, and user-friendly monitoring system in the span of 3 weeks.
+> The main objective is to create a lightweight and user-friendly monitoring system.
 
 The system will:
 
-- **Monitor in real-time**: Display live CPU, memory, and disk metrics with sub-second updates
-- **Support multiple machines**: Track metrics from 2-3+ machines simultaneously
-- **Store historical data**: Enable analysis of past performance trends
-- **Enable remote access**: Monitor homelab from anywhere via VPN
-- **Minimize resource usage**: Lightweight agents with minimal system impact
+- **Monitor in real-time**: Display live CPU, Memory, Disk, Network and Processes 
+- **Minimize resource usage**: Lightweight scraping host with minimal system impact
+- **Maximize user experience**: Intuitive user interface
 
-## Main Question
+### 3. Main question
 
-How to efficiently monitor multiple machines in real-time with minimal overhead?
+> How to efficiently monitor multiple devices in real-time with minimal overhead?
 
-## MoSCoW Method
+### 4. MoSCoW method
 
-### Must Have
-- Agent collecting system metrics (CPU, memory, disk)
-- Local SQLite storage for historical data
-- WebSocket server for real-time streaming
-- Central registry for agent discovery
-- Web dashboard displaying live metrics
-- Basic charts visualization
-- Agent auto-registration
+#### 4.1 Must have
 
-### Should Have
+- Host collecting system metrics (CPU, memory, disk)
+- WebSocket server for real-time data streaming
+- Dashboard displaying live metrics
+
+#### 4.2 Should have
+
 - Connection status indicators
-- Error handling and reconnection logic
-- Historical data queries (last 24 hours)
-- Multiple chart types
-- Tailscale VPN setup
+- Active hosts registry
+- Host auto-registration to host registry
 
-### Could Have
+#### 4.3 Could have
+
+- Basic authentication
+- VPN connectivity
 - Alert notifications
+- Basic charts visualization
 - Custom metric collection intervals
 - Data export functionality
-- Agent management UI
+- Host management user interface
 
-### Won't Have (for v1.0)
+#### 4.4 Won't have
+
 - Advanced authentication system
-- Complex data aggregations
-- Mobile app
-- Multi-user support
-- Cloud deployment
+- Multiple user support
+- Localization
+- Historical data of system metrics
 
-## SWOT Analysis
+### 3. SWOT Analysis
 
-### Strengths
+#### 3.1 Strengths
+
 - Real-time monitoring
 - Minimal dependencies
 - Cross-platform compatibility
 - Low resource footprint
 - Simple deployment
 
-### Weaknesses
+#### 3.2 Weaknesses
+
 - Limited to local network (without VPN)
 - Single-user design
-- Basic visualization
+- Basic information visualization
+- Cannot control device remotely from dashboard
 
-### Opportunities
-- Add more metric types (network, temperature)
+#### 3.3 Opportunities
+
+- Add more metric types (file structure, docker containers)
 - Implement alerting system
 - Create mobile dashboard
-- Add data aggregation features
 
-### Threats
+#### 3.4 Threats
+
 - Network connectivity issues
 - WebSocket connection instability
-- SQLite file corruption
-- Agent crashes
+- Data corruption
+- Crashes
 
-## Stakeholders
+### 4. Stakeholders
 
-**Primary User**: Self (homelab administrator)
+#### 4.1 PI matrix
 
-**Power/Interest Matrix:**
-- High Power, High Interest: Self (developer and end user)
-- Low Power, Low Interest: N/A (personal project)
+![PI matrix](assets/Stakehodlers.png)
 
-## Planning
+### 5. Planning
 
-### Week 1: Agent Development & WebSocket (40 hours)
+> Each estimation includes buffer time for unexpected issues, research and learning. 
 
-**Day 1-2: Agent Foundation (8h)**
-- Set up Bun project structure - *1h*
-- Implement metrics collection with systeminformation - *3h*
-- Design and create SQLite schema - *2h*
-- Basic metric storage logic - *2h*
+#### 5.1 Analysis
 
-**Day 3-4: WebSocket Implementation (8h)**
-- Implement WebSocket server - *3h*
-- Stream live metrics every 2-3 seconds - *2h*
-- Test with browser console client - *2h*
-- Error handling and connection lifecycle - *1h*
+| **Task**                    | **Estimated Time** |
+| --------------------------- | -------------------------- |
+| Collect requirements        | -                          |
+| Research tools & frameworks | 2 h                         |
+| Documentation               | 4 h                         |
 
-**Day 5: Historical Data API (4h)**
-- REST endpoint for historical queries - *2h*
-- Test with curl/Postman - *1h*
-- Documentation - *1h*
+#### 5.2 Design
 
-**Weekend: Buffer & Experimentation (4h)**
-- Refine implementation
-- Test on local machine
-- Fix bugs
+| **Task**              | **Estimated Time** |
+| --------------------- | -------------------------- |
+| Design code structure | 1 h                         |
+| Design host logic    | 5 h                         |
+| Design client logic   | 3 h                         |
+| Create wireframes     | 2 h                         |
+| Documentation         | 4 h                         |
 
----
+#### 5.3 Realisation
 
-### Week 2: Central Server & Multi-Machine (40 hours)
+##### 5.3.1 Host Development
 
-**Day 1-2: Central Registry (8h)**
-- Set up central server project - *1h*
-- Create registry SQLite schema - *1h*
-- Implement registration endpoint - *3h*
-- Agent list API endpoint - *2h*
-- Test agent registration - *1h*
+| **Task**                             | **Estimated Time** |
+| ------------------------------------ | -------------------------- |
+| Set up host project                 | 2 h                         |
+| Implement metrics collection         | 6 h                         |
+| Implement websocket server           | 5 h                         |
+| Stream live metrics every 30 seconds | 2 h                         |
+| Test websocket server with Postman   | 4 h                         |
+| Refine implementation                | -                          |
+| Test on local machine                | -                          |
+| Fix bugs                             | -                          |
+| Documentation                        | 5 h                         |
 
-**Day 3-4: Multi-Machine Deployment (8h)**
-- Deploy agent on 2-3 machines - *2h*
-- Implement auto-registration on startup - *3h*
-- Test cross-machine communication - *2h*
-- Handle agent disconnections - *1h*
+##### 5.3.2 Client Development
 
-**Day 5: Tailscale Setup (4h)**
-- Install Tailscale on all machines - *1h*
-- Configure mesh network - *1h*
-- Test remote access - *1h*
-- Documentation - *1h*
+| **Task**                      | **Estimated Time** |
+| :---------------------------- | -------------------------- |
+| Set up client project         | 1 h                         |
+| Set up web server             | 2 h                         |
+| WebSocket connection to host | 3 h                         |
+| Create HTML structure         | 3 h                         |
+| Display live metrics          | 3 h                         |
+| Handle reconnections          | 1 h                         |
+| Connection status indicators  | 1 h                         |
+| Basic styling and layout      | 2 h                         |
+| Final polish                  | 1 h                         |
+| Documentation                 | 5 h                         |
 
-**Weekend: Troubleshooting & Refinement (4h)**
-- Fix connectivity issues
-- Optimize registration flow
-- Test reliability
+### 6. Learning Outcomes
 
----
+#### 6.1 Technical Skills
 
-### Week 3: Dashboard & Polish (40 hours)
+- **WebSockets**: Understanding bidirectional real-time data streaming
+- **Multi-Machine Architecture**: discovery, registration, health checks
+- **Networking**: VPN, remote access
+- **Real-Time Data**: Live updates, performance optimization
 
-**Day 1-2: Dashboard Foundation (8h)**
-- Create HTML structure with Pico CSS - *2h*
-- Implement agent list fetching - *2h*
-- Display agents in UI - *2h*
-- Basic styling and layout - *2h*
+#### 6.2 Professional Skills
 
-**Day 3-4: Real-Time Charts (8h)**
-- Integrate Chart.js - *2h*
-- Implement WebSocket connection to agent - *3h*
-- Display live metrics in charts - *2h*
-- Handle reconnections - *1h*
-
-**Day 5: Polish & Features (4h)**
-- Error handling and user feedback - *1h*
-- Connection status indicators - *1h*
-- Historical data view - *1h*
-- Final UI polish - *1h*
-
-**Weekend: Final Testing & Documentation (4h)**
-- End-to-end testing
-- Bug fixes
-- Write documentation
-- Create usage guide
-
----
-
-### Total Time Estimate: 120 hours (3 weeks × 40h)
-
-**Contingency**: Each week includes buffer time for unexpected issues and learning curve.
-
-## Learning Outcomes
-
-### Technical Skills
-- **WebSocket Communication**: Understanding bidirectional real-time data streaming
-- **Multi-Machine Architecture**: Service discovery, registration patterns, health checks
-- **VPN Networking**: Tailscale mesh networking, secure remote access
-- **Time-Series Data**: Efficient storage and querying of metrics
-- **Real-Time Visualization**: Chart updates, performance optimization
-
-### Professional Skills
 - **System Design**: Designing distributed monitoring architecture
 - **Documentation**: Writing clear technical documentation
-- **Testing Strategy**: Incremental testing, debugging distributed systems
-- **Time Management**: Delivering working product within 3-week timeline
+- **Time Management**: Delivering working product within a 4-week timeline
 
-### Homelab Knowledge
-- Creating production-ready tools for personal infrastructure
-- Understanding system metrics and monitoring patterns
-- Network security and remote access best practices
+### 7. Conclusion
 
-## Conclusion
-
-This project will result in a fully functional homelab monitoring system while developing valuable skills in real-time communication, distributed systems, and network security. The 3-week timeline is aggressive but achievable with focused development and the minimalist technology stack chosen. The system will serve as a foundational tool for ongoing homelab management and can be extended with additional features in the future.
+This project will result in a functional local network monitoring system while developing valuable skills in real-time communication, distributed systems, and networking. The 4-week timeline is aggressive but achievable with proper time management and the minimalist technology stack chosen. The system will serve as a foundational tool for ongoing systems management and can be extended with additional features in the future.

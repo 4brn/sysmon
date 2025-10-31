@@ -1,55 +1,63 @@
-# Orientation - System Monitoring
+# Orientation
 
-**Student Name**: Aleksandar Rangelov
+**Name**: Aleksandar Rangelov
+
 **Student Number**: 572601
 
 ## Table of Contents
 
-## Summary
-Project will consist of two parts: 
-1. Metrics scrapper installed on a host machine, that collects and stores data locally in a lightweight database
-2. Web-based dashboard that allows user to remotely access and view system metrics in real time. 
+[TOC]
 
-Topics covered in this project:
-1. Networking & Cloud
-    - Remote access and real-time communication between host device and client.
-2. Intelligent Technologies
-    - Scrapper embeds into a device as a background process
-3. Software Engineering
-    - Client-server architecture, development using industry standard methodologies.
+## 1. Introduction
 
-## Introduction
+Infrastructure is the backbone of today's world. Millions of devices service our daily technical and informational needs. Therefore there is a need to monitor and ensure these devices function correctly. Even though I won't be able to create a solution for enterprise usage, I can provide a solution for enthusiasts.
 
-Infrastructure is the backbone of today's world. Millions of devices service our daily technical needs. Therefore there is a need to monitor and ensure these devices function correctly and operate within the computational limits. Even though I won't be able to create a solution for enterprise usage, I can try and provide a solution for the normal individuals.
+### 1.1 Project overview
 
-## Topics
+Project consists of two parts: 
+1. **Host**
 
-### Networking & Cloud
+   > Software installed on a device, allowing a client to connect to said device in order to receive the data (cpu, memory, etc.).
 
-> - Remote device access
-> - Websockets (TCP)
-> - Scalability System Design
+2. **Client**
 
-The project uses a client server architecture. Devices store all the relevant system metrics and communicate with their local database (server), while the web app displays the data (client). Every device acts like a independent node ensuring scalability.
+    > Web dashboard that allows user to remotely connect to devices with the host program running and view information about them in real time. 
+
+### 1.2 Topics covered:
+
+- Networking & Cloud
+
+- Intelligent Technologies
+
+- Software Engineering
+
+## 2. Topics
+
+### 2.1 Networking & Cloud
+
+- Remote connectivity
+- WebSockets
+- Scalability
+
+The project uses a client server architecture. Devices act as a server, collecting relevant system information and wait for a connection from a client, while the client visualizes received information. Host devices are independent, because they hold all the logic, allowing for a seamless expansion and scalability of monitored devices.
 
 Project reflects key concepts in cloud infrastructure and networking.
 
-### Intelligent Technologies
+### 2.2 Intelligent Technologies
 
-> - Embedded software design
-> - Hardware-software interfacing
-> - Resource Efficient Programming
+- Embedded Software Design
+- Hardware-Software Interfacing
+- Resource Efficient Programming
 
-The scrapper acts as a continuous background process agent without changing the primary function of the machine. Moreover the system metric data extraction needs to be done without additional computational power, relative to the resource efficient programming used in Embedded Systems. 
+The agent acts as a continuous background process agent without changing the primary function of the device it is installed on. Moreover the system metric data extraction needs to be done without using a lot of computational resources, resembling the resource efficient programming used in Embedded Systems. 
 
-### Software Engineering
+### 2.3 Software Engineering
 
-> - RESTful API
-> - Client-Server Architecture
-> - Web Development
+- Client-Server architecture
+- Web development
 
-The Projects project uses a client-server architecture,also used in web development. Moreover it uses development standards like version management (git) and RESTful APIs.
+The Projects project uses a client-server architecture, used in almost every software product. Moreover it uses development standards like version management (git) and APIs.
 
-## Conclusion
+## 3. Conclusion
 
-In conclusion, the project outlines a major learning experience, covering key topics in the area of ICT (networking, embedded systems), overall being and interesting and reasonably complex second project.
+In conclusion, the project outlines a major learning opportunity, covering key topics in the area of ICT and overall being an interesting and reasonably complex second project.
